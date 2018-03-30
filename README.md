@@ -33,5 +33,5 @@ TODO complete instructions
 
 ## Copyright
 
-Windows hardening DSC resource
+Windows hardening DSC resource.
 Copyright 2018 Stu Mace 'kewalaka', released under an Apache License.
