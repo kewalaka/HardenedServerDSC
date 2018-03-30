@@ -16,56 +16,55 @@ TODO more than one
 Configuration hardenedServerConfig
 {
     param (
-
-        [string]$CompanyName = "Example Organisation Ltd"
-
         #region: Common configurable parameters
-        [string]$PreLogonMessageTitle = "Logon policy for $CompanyName"
+        [string]$CompanyName = "Example Organisation Ltd",
+
+        [string]$PreLogonMessageTitle = "Logon policy for $CompanyName",
 
         [string]$PreLogonMessageBody = @"
         This is a secured and audited system.
         Access is strictly for those persons authorised to do so, and use must be in line with $CompanyName Acceptable Use Policy.
         Attempts to access this system by unauthorised personal may result in criminal prosecution.
-"@         
+"@,
 
-        [string]$renameGuestTo = 'secretGuestName'
-        [string]$renameAdminTo = 'secretAdminName'
+        [string]$renameGuestTo = 'secretGuestName',
+        [string]$renameAdminTo = 'secretAdminName',
 
-        [bool]$enableWinRM = $false
+        [bool]$enableWinRM = $false,
 
         [ValidateRange(3,24)]
-        [int]$PasswordHistory = 15
+        [int]$PasswordHistory = 15,
 
         [ValidateRange(30,999)]    
-        [int]$MaxPasswordAge = 42
+        [int]$MaxPasswordAge = 42,
 
         [ValidateRange(1,999)]        
-        [int]$MinPasswordAge = 2
+        [int]$MinPasswordAge = 2,
 
         [ValidateRange(8,14)]
-        [int]$MinPasswordLength = 12   
+        [int]$MinPasswordLength = 12,
         
-        [int]$AccountLockoutThreshold = 5
+        [int]$AccountLockoutThreshold = 5,
 
         [ValidateRange(30,999)]
-        [int]$AccountLockoutDuration = 30
+        [int]$AccountLockoutDuration = 30,
 
         [ValidateRange(30,99999)]
-        [int]$ResetAccountLockoutAfter = 30
+        [int]$ResetAccountLockoutAfter = 30,
         #endregion
         
         #region: Configurable parameters where care should be taken to understand impact
         [ValidateRange(4,10)]
-        [int]$MaxLifetimeUserTkt = 4
+        [int]$MaxLifetimeUserTkt = 4,
 
         [ValidateRange(1,7)]
-        [int]$MaxLifetimeUserTktRenewal = 1
+        [int]$MaxLifetimeUserTktRenewal = 1,
 
         [ValidateSet('Enabled','Disabled')]
-        $AllowShutdownWithoutLogon = 'Disabled'
+        $AllowShutdownWithoutLogon = 'Disabled',
 
         [ValidateSet('Enabled','Disabled')]
-        $UACElevateSignedExecutablesOnly = 'Enabled'
+        $UACElevateSignedExecutablesOnly = 'Enabled',
 
         [ValidateSet('Enabled','Disabled')]
         $UACElevateLibrariesInSecureLocationsOnly = 'Enabled'
@@ -73,7 +72,7 @@ Configuration hardenedServerConfig
         #endregion
     )
 
-    Import-DSCModule -ModuleName SecurityPolicyDsc
+    Import-DSCResource -ModuleName SecurityPolicyDsc
 
     #region: access settings
 

@@ -6,9 +6,9 @@
 configuration simpleExample
 {
     
-    Import-DscResource -ModuleName hardenedServerConfig
+    Import-DscResource -ModuleName HardenedServerConfig
 
-    hardenedServerConfig securebuild {
+    HardenedServerConfig securebuild {
         CompanyName          = 'Stu Corp'
     } 
 }
