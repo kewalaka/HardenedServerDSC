@@ -31,9 +31,10 @@ Configuration SimpleExample
         } 
     }
 }
-```
 
 SimpleExample
+```
+
 ## Instructions
 
 To use, you need to install the AuditPolicyDSC, SecurityPolicyDSC modules.  This can be done from a machine with internet access
