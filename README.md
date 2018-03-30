@@ -15,8 +15,25 @@ Requires Powershell 2 on target server to be secure.
 
 ## Example usage
 
-Some examples are provided Examples subfolder, if you're unfamiliar with DSC see instructions below for a walkthrough
+Some examples are provided Examples subfolder, if you're unfamiliar with DSC see the instructions section below for a
+walkthrough.  Here's a simple example:
 
+```
+Configuration SimpleExample
+{
+    
+    Import-DscResource -ModuleName HardenedServerConfig
+
+    Node 'localhost'
+    {
+        HardenedServerConfig securebuild {
+            CompanyName          = 'Stu Corp'
+        } 
+    }
+}
+```
+
+SimpleExample
 ## Instructions
 
 To use, you need to install the AuditPolicyDSC, SecurityPolicyDSC modules.  This can be done from a machine with internet access
