@@ -72,7 +72,7 @@ Configuration hardenedServerConfig
         #endregion
     )
 
-    Import-DSCResource -ModuleName SecurityPolicyDsc
+    Import-DSCResource -ModuleName AuditPolicyDsc, SecurityPolicyDsc
 
     #region: access settings
 
@@ -243,6 +243,8 @@ Configuration hardenedServerConfig
         }
     }
     #endregion
+
+    #region: Audit settings
 
     #region: RDP settings
 
