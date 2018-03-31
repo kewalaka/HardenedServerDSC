@@ -22,7 +22,7 @@ walkthrough.  Here's a simple example:
 Configuration SimpleExample
 {
     
-    Import-DscResource -ModuleName HardenedServerConfig
+    Import-DscResource -ModuleName HardenedServerDSC
 
     Node 'localhost'
     {
