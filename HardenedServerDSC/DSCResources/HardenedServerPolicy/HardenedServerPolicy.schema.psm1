@@ -1,19 +1,4 @@
-<#
-.SYNOPSIS
-
-This is a DSC composite resource that can be used to harden a Windows OS.  Reasonable defaults that meet
-CIS requirements are supplied, but can be overridden by parameters.
-
-.PARAMETER PasswordHistory
-TODO add detail
-
-.EXAMPLE
-TODO examples are good
-.EXAMPLE
-TODO more than one
-
-#>
-Configuration hardenedServerConfig
+Configuration HardenedServerPolicy
 {
     param (
         #region: Common configurable parameters
@@ -72,87 +57,36 @@ Configuration hardenedServerConfig
         #endregion
     )
 
-    Import-DSCResource -ModuleName AuditPolicyDsc, SecurityPolicyDsc
+    Import-DSCResource -ModuleName SecurityPolicyDsc
 
     #region: access settings
 
-    # Verify the Windows folder permissions are properly setwindows-base-100
-    # TODO Doesn't make sense - what does this do except check Windows is a directory?
-    #win_file:
-    #Key       = 'C:\windows'
-    #state: directory
+    # windows-base-100 check is ignored 
+    # what does this do except check Windows is a directory?
+    # TODO research more.
+
 
     # Safe DLL Search Mode is Enabled
+    # can't be managed by GPO
+    #   https://msdn.microsoft.com/en-us/library/ms682586(v=vs.85).aspx
+    #   https://technet.microsoft.com/en-us/library/dd277307.aspx
     Registry windows-base-101
     {
-        Key       = 'HKLM:\System\CurrentControlSet\Control\Session Manager'
+        Key       = 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager'
         ValueName = "SafeDllSearchMode"
         ValueData = "0"
-        ValueType = "dword"
-    }
-
-    # Anonymous Access to Windows Shares and Named Pipes is Disallowed
-    Registry windows-base-102
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters'
-        ValueName = "RestrictNullSessAccess"
-        ValueData = "1"
-        ValueType = "dword"
-    }
-
-    # All Shares are Configured to Prevent Anonymous Access
-    Registry windows-base-103
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters'
-        ValueName = "NullSessionShares"
-        ValueData = ""
-        ValueType = multistring
-    }
-
-    # Force Encrypted Windows Network Passwords
-    Registry windows-base-104
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Services\LanmanWorkstation\Parameters'
-        ValueName = "EnablePlainTextPassword"
-        ValueData = "0"
-        ValueType = "dword"
+        ValueType = 'Dword'
     }
 
     # Disable SMB1 to Windows Shares
     Registry windows-base-105
     {
-        Key       = 'HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters'
+        Key       = 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters'
         ValueName = "SMB1"
         ValueData = "0"
-        ValueType = "dword"
+        ValueType = 'Dword'
     }
 
-    # Strong Windows NTLMv2 Authentication Enabled; Weak LM Disabled
-    Registry windows-base-201
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Control\Lsa'
-        ValueName = "LmCompatibilityLevel"
-        ValueData = "4"
-        ValueType = "dword"
-    }
-
-    # Enable Strong Encryption for Windows Network Sessions on Clients
-    Registry windows-base-202
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Control\Lsa\MSV1_0'
-        ValueName = "NtlmMinClientSec"
-        ValueData = "537395200"
-        ValueType = "dword"
-    }
-
-    # Enable Strong Encryption for Windows Network Sessions on Servers
-    Registry windows-base-203
-    {
-        Key       = 'HKLM:\System\CurrentControlSet\Control\Lsa\MSV1_0'
-        ValueName = "NtlmMinServerSec"
-        ValueData = "537395200"
-        ValueType = "dword"
-    }
 
     #endregion
 
@@ -201,18 +135,22 @@ Configuration hardenedServerConfig
         Interactive_logon_Do_not_display_last_user_name = 'Enabled'
         Interactive_logon_Require_Domain_Controller_authentication_to_unlock_workstation = 'Enabled'
         Microsoft_network_client_Digitally_sign_communications_always = 'Enabled'
-        Microsoft_network_client_Send_unencrypted_password_to_third_party_SMB_servers = 'Disabled'
+        Microsoft_network_client_Send_unencrypted_password_to_third_party_SMB_servers = 'Disabled' # windows-base-104
         Microsoft_network_server_Amount_of_idle_time_required_before_suspending_session = $SessionIdleTimeout
         Microsoft_network_server_Server_SPN_target_name_validation_level = 'Required from client'
         Network_access_Allow_anonymous_SID_Name_translation = 'Disabled'
         Network_access_Do_not_allow_anonymous_enumeration_of_SAM_accounts_and_shares = 'Enabled'
         Network_access_Do_not_allow_storage_of_passwords_and_credentials_for_network_authentication = 'Enabled'
         Network_access_Let_Everyone_permissions_apply_to_anonymous_users = 'Disabled'
-        Network_security_LAN_Manager_authentication_level = 'Send NTLMv2 responses only. Refuse LM & NTLM'
+        Network_security_Minimum_session_security_for_NTLM_SSP_based_including_secure_RPC_clients = 'Both options checked' # windows-base-202
+        Network_security_Minimum_session_security_for_NTLM_SSP_based_including_secure_RPC_servers = 'Both options checked' # windows-base-203
+        Network_access_Restrict_anonymous_access_to_Named_Pipes_and_Shares = 'Enabled' # windows-base-102
+        Network_access_Shares_that_can_be_accessed_anonymously = '' # no shares can be accessed anonymously.  # windows-base-103
+        Network_security_LAN_Manager_authentication_level = 'Send NTLMv2 responses only. Refuse LM & NTLM' # windows-base-201
         Network_security_LDAP_client_signing_requirements = 'Require Signing'
         Shutdown_Allow_system_to_be_shut_down_without_having_to_log_on = $AllowShutdownWithoutLogon
         Shutdown_Clear_virtual_memory_pagefile = 'Enabled'
-        System_cryptography_Force_strong_key_protection_for_user_keys_stored_on_the_computer = 'Enabled'
+        System_cryptography_Force_strong_key_protection_for_user_keys_stored_on_the_computer = 'User must enter a password each time they use a key'
         System_cryptography_Use_FIPS_compliant_algorithms_for_encryption_hashing_and_signing = 'Enabled'
         System_objects_Strengthen_default_permissions_of_internal_system_objects_eg_Symbolic_Links = 'Enabled'
     }    
@@ -246,25 +184,6 @@ Configuration hardenedServerConfig
 
     #region: Audit settings
 
-    #region: RDP settings
-
-    # Windows Remote Desktop Configured to Always Prompt for Password
-    Registry windows-rdp-100
-    {
-        Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
-        ValueName = 'fPromptForPassword'
-        ValueData = '1'
-        ValueType = '"dword"'
-    }
-
-    # Strong Encryption for Windows Remote Desktop Required 
-    Registry windows-rdp-101
-    {
-        Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
-        ValueName = 'MinEncryptionLevel'
-        ValueData = '3'
-        ValueType = '"dword"'        
-    }
     #endregion
 
     #region: User Rights
@@ -329,15 +248,4 @@ Configuration hardenedServerConfig
     }
     #endregion
 
-    #region: IE lockdown
-
-    #TODO
-
-    #endregion
-
-    #region: WinRM
-
-    #TODO
-
-    #endregion
 }

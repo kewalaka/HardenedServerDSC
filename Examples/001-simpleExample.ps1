@@ -5,7 +5,7 @@
 Configuration SimpleExample
 {
     
-    Import-DscResource -ModuleName HardenedServerConfig
+    Import-DscResource -ModuleName HardenedServerDSC
 
     Node 'localhost'
     {
