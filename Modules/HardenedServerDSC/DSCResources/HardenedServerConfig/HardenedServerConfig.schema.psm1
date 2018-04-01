@@ -54,6 +54,8 @@ Configuration hardenedServerConfig
         [int]$ResetAccountLockoutAfter = 30     
     )
 
+    Import-DscResource –ModuleName 'PSDesiredStateConfiguration'
+
     HardenedAuditSettings AuditPolicySettings {
         isDomainController = $isDomainController
     }

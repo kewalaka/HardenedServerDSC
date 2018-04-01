@@ -2,55 +2,89 @@ Configuration HardenedServerPolicy
 {
     param (
         #region: Common configurable parameters
-        [string]$CompanyName = "Example Organisation Ltd",
+        [Parameter()]
+        [string]
+        $CompanyName = "Example Organisation Ltd",
 
-        [string]$PreLogonMessageTitle = "Logon policy for $CompanyName",
+        [Parameter()]        
+        [string]
+        $PreLogonMessageTitle = "Logon policy for $CompanyName",
 
-        [string]$PreLogonMessageBody = @"
+        [Parameter()]        
+        [string]
+        $PreLogonMessageBody = @"
         This is a secured and audited system.
         Access is strictly for those persons authorised to do so, and use must be in line with $CompanyName Acceptable Use Policy.
         Attempts to access this system by unauthorised personal may result in criminal prosecution.
 "@,
 
-        [string]$renameGuestTo = 'secretGuestName',
-        [string]$renameAdminTo = 'secretAdminName',
+        [Parameter()]
+        [string]
+        $renameGuestTo = 'secretGuestName',
 
-        [bool]$enableWinRM = $false,
+        [Parameter()]
+        [string]
+        $renameAdminTo = 'secretAdminName',
 
+        [Parameter()]
+        [bool]
+        $enableWinRM = $false,
+
+        [Parameter()]
         [ValidateRange(3,24)]
-        [int]$PasswordHistory = 15,
+        [int]
+        $PasswordHistory = 15,
 
+        [Parameter()]
         [ValidateRange(30,999)]    
-        [int]$MaxPasswordAge = 42,
+        [int]
+        $MaxPasswordAge = 42,
 
+        [Parameter()]
         [ValidateRange(1,999)]        
-        [int]$MinPasswordAge = 2,
+        [int]
+        $MinPasswordAge = 2,
 
+        [Parameter()]
         [ValidateRange(8,14)]
-        [int]$MinPasswordLength = 12,
+        [int]
+        $MinPasswordLength = 12,
         
-        [int]$AccountLockoutThreshold = 5,
+        [Parameter()]
+        [int]
+        $AccountLockoutThreshold = 5,
 
+        [Parameter()]
         [ValidateRange(30,999)]
-        [int]$AccountLockoutDuration = 30,
+        [int]
+        $AccountLockoutDuration = 30,
 
+        [Parameter()]
         [ValidateRange(30,99999)]
-        [int]$ResetAccountLockoutAfter = 30,
+        [int]
+        $ResetAccountLockoutAfter = 30,
         #endregion
         
         #region: Configurable parameters where care should be taken to understand impact
+        [Parameter()]
         [ValidateRange(4,10)]
-        [int]$MaxLifetimeUserTkt = 4,
+        [int]
+        $MaxLifetimeUserTkt = 4,
 
+        [Parameter()]
         [ValidateRange(1,7)]
-        [int]$MaxLifetimeUserTktRenewal = 1,
+        [int]
+        $MaxLifetimeUserTktRenewal = 1,
 
+        [Parameter()]
         [ValidateSet('Enabled','Disabled')]
         $AllowShutdownWithoutLogon = 'Disabled',
 
+        [Parameter()]
         [ValidateSet('Enabled','Disabled')]
         $UACElevateSignedExecutablesOnly = 'Enabled',
 
+        [Parameter()]
         [ValidateSet('Enabled','Disabled')]
         $UACElevateLibrariesInSecureLocationsOnly = 'Enabled'
         
@@ -105,11 +139,21 @@ Configuration HardenedServerPolicy
         Account_lockout_duration = $AccountLockoutDuration
         Account_lockout_threshold = $AccountLockoutThreshold
         Reset_account_lockout_counter_after = $ResetAccountLockoutAfter
-        Maximum_lifetime_for_user_ticket = $MaxLifetimeUserTkt  
-        Maximum_lifetime_for_user_ticket_renewal = 1
-        Maximum_lifetime_for_service_ticket = 600
-        Maximum_tolerance_for_computer_clock_synchronization = 5
     }
+
+    if ($isDomainController)
+    {
+        AccountPolicy DomainControllerAccountPolicies
+        {
+            Name = 'DCAccountPolicies'
+            Maximum_lifetime_for_user_ticket = $MaxLifetimeUserTkt  
+            Maximum_lifetime_for_user_ticket_renewal = 1
+            Maximum_lifetime_for_service_ticket = 600
+            Maximum_tolerance_for_computer_clock_synchronization = 5
+        }        
+    }
+
+
 
     # rename accounts & auditing global system objects
     SecurityOption AccountSecurityOptions
