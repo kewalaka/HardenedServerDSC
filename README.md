@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/sn716it1n4fcy2xu/branch/master?svg=true)](https://ci.appveyor.com/project/kewalaka/hardenedserverdsc)
+
 # Windows server hardening using PowerShell DSC
 
 This is a composite DSC resource that can be used to harden a Windows OS.  There are a number of configurable parameters,
