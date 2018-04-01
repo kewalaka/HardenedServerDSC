@@ -1,4 +1,4 @@
-Configuration SimpleExample
+Configuration HardenedServerConfig_Config
 {
     
     Import-DscResource -ModuleName HardenedServerDSC
