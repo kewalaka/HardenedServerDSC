@@ -38,7 +38,7 @@ after_test:
         Write-Output (pwd).Path 
 
 artifacts:
-  - path: c:\Windows\security\logs\scesrv.log
+  - path: .\scesrv.log
     name: scesrv.log
 
 on_finish:
