@@ -32,8 +32,14 @@ test_script:
 #---------------------------------#
 #      deployment configuration   #
 #---------------------------------#
-
+after_test:
+  - ps: |
+        Copy-Item c:\Windows\security\logs\scesrv.log .
+        Write-Output (pwd).Path 
 
 artifacts:
   - path: c:\Windows\security\logs\scesrv.log
     name: scesrv.log
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))    
