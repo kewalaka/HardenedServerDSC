@@ -33,10 +33,7 @@ test_script:
 #      deployment configuration   #
 #---------------------------------#
 
-# scripts to run before deployment
-deploy_script:
-    - ps: |
-        Invoke-AppveyorAfterTestTask `
-            -Type 'Wiki' `
-            -MainModulePath $mainModuleFolder `
-            -ResourceModuleName $moduleName
+
+artifacts:
+  - path: c:\Windows\security\logs\scesrv.log
+    name: scesrv.log
