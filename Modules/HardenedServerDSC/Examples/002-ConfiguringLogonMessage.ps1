@@ -17,7 +17,7 @@ configuration mySecureServer
     
 '@
     
-    Import-DscResource -ModuleName hardenedServerConfig, xNetworking
+    Import-DscResource -ModuleName HardenedServerDSC, xNetworking
 
     hardenedServerConfig securebuild {
         PreLogonMessageTitle = $PreLogonMessageTitle
