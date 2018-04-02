@@ -33,7 +33,7 @@ Configuration HardenedServerPolicy
         [Parameter()]
         [ValidateRange(3,24)]
         [int]
-        $PasswordHistory = 15,
+        $PasswordHistory = 24,
 
         [Parameter()]
         [ValidateRange(30,999)]    
@@ -48,7 +48,7 @@ Configuration HardenedServerPolicy
         [Parameter()]
         [ValidateRange(8,14)]
         [int]
-        $MinPasswordLength = 12,
+        $MinPasswordLength = 14,
         
         [Parameter()]
         [int]

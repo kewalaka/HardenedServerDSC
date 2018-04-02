@@ -28,6 +28,10 @@ Machine Name,Policy Target,Subcategory,Subcategory GUID,Inclusion Setting,Exclus
 ,System,Security State Change,{0cce9210-69ae-11d9-bed3-505054503030},Success,,1
 ,System,Security System Extension,{0cce9211-69ae-11d9-bed3-505054503030},Success and Failure,,3
 ,System,System Integrity,{0cce9212-69ae-11d9-bed3-505054503030},Success and Failure,,3
+,System,Other Account Logon Events,{0CCE9241-69AE-11D9-BED3-505054503030},Success and Failure,,3
+,System,Application Group Management,{0CCE9239-69AE-11D9-BED3-505054503030},Success and Failure,,3
+,System,Computer Account Management,{0CCE9236-69AE-11D9-BED3-505054503030},Success and Failure,,3
+,System,Distribution Group Management,{0CCE9238-69AE-11D9-BED3-505054503030},Success and Failure,,3
 '@
 
     # requires specific build, not present on Win2k12 RTM, guessed to be 2016?  TODO research
@@ -60,4 +64,41 @@ Machine Name,Policy Target,Subcategory,Subcategory GUID,Inclusion Setting,Exclus
         CsvPath = 'C:\windows\temp\polaudit.csv'
         DependsOn = '[File]auditcsv'
     }
+
+    # Configure System Event Log (Application) | windows-audit-100
+    Registry windows-audit-100 
+    {
+      Key       = 'HKLM:\Software\Policies\Microsoft\Windows\EventLog\Application'
+      ValueName = "MaxSize"
+      ValueData = "1"
+      ValueType = 'Dword'
+    }
+  
+    # Configure System Event Log (Security) | windows-audit-101
+    Registry windows-audit-101
+    {
+      Key       = 'HKLM:\Software\Policies\Microsoft\Windows\EventLog\Security'
+      ValueName = "MaxSize"
+      ValueData = "1"
+      ValueType = 'Dword'
+    }
+  
+    # Configure System Event Log (Setup) | windows-audit-102
+    Registry windows-audit-102
+    {
+      Key       = 'HKLM:\Software\Policies\Microsoft\Windows\EventLog\Setup'
+      ValueName = "MaxSize"
+      ValueData = "1"
+      ValueType = 'Dword'
+    }
+  
+    # Configure System Event Log (System) | windows-audit-103
+    Registry windows-audit-103
+    {
+      Key       = 'HKLM:\Software\Policies\Microsoft\Windows\EventLog\System'
+      ValueName = "MaxSize"
+      ValueData = "1"
+      ValueType = 'Dword'
+    }
+
 }

@@ -58,7 +58,9 @@ Configuration hardenedServerConfig
         isDomainController = $isDomainController
     }
 
-    HardenedServerPolicy ServerPolicySettings {}
+    HardenedServerPolicy ServerPolicySettings {
+        enableWinRM = $enableWinRM
+    }
 
     HardenedServerRDP RDPSettings {}
 
