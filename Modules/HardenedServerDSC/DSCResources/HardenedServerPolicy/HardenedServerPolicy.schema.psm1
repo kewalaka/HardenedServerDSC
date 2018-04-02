@@ -93,6 +93,12 @@ Configuration HardenedServerPolicy
 
     Import-DSCResource -ModuleName SecurityPolicyDsc
 
+    # check message title does not include newline character.
+    if ($PreLogonMessageTitle -match '\n')
+    {
+        Throw 'The title of the message for users attempting to log on ($PreLogonMessageTitle) cannot contain a newline' 
+    }    
+
     #region: access settings
 
     # windows-base-100 check is ignored 
@@ -180,8 +186,9 @@ Configuration HardenedServerPolicy
         Interactive_logon_Require_Domain_Controller_authentication_to_unlock_workstation = 'Enabled'
         Microsoft_network_client_Digitally_sign_communications_always = 'Enabled'
         Microsoft_network_client_Send_unencrypted_password_to_third_party_SMB_servers = 'Disabled' # windows-base-104
-        Microsoft_network_server_Amount_of_idle_time_required_before_suspending_session = $SessionIdleTimeout
-        Microsoft_network_server_Server_SPN_target_name_validation_level = 'Required from client'
+        Microsoft_network_server_Amount_of_idle_time_required_before_suspending_session = 15
+        # TODO when https://github.com/PowerShell/SecurityPolicyDsc/issues/85 is fixed
+        #Microsoft_network_server_Server_SPN_target_name_validation_level = 'Required from client'
         Network_access_Allow_anonymous_SID_Name_translation = 'Disabled'
         Network_access_Do_not_allow_anonymous_enumeration_of_SAM_accounts_and_shares = 'Enabled'
         Network_access_Do_not_allow_storage_of_passwords_and_credentials_for_network_authentication = 'Enabled'
@@ -220,8 +227,8 @@ Configuration HardenedServerPolicy
         SecurityOption LogonMessage
         {
             Name = "LogonMessage"
-            Interactive_logon_Message_text_for_users_attempting_to_log_on = $PreLogonMessageTitle
-            Interactive_logon_Message_title_for_users_attempting_to_log_on = $PreLogonMessageBody
+            Interactive_logon_Message_title_for_users_attempting_to_log_on = $PreLogonMessageTitle
+            Interactive_logon_Message_text_for_users_attempting_to_log_on = $PreLogonMessageBody
         }
     }
     #endregion
