@@ -64,6 +64,8 @@ Configuration hardenedServerConfig
 
     HardenedServerRDP RDPSettings {}
 
+    HardenedServerMisc MiscSettings {}
+    
 <#
     TODO
       IE lockdown
