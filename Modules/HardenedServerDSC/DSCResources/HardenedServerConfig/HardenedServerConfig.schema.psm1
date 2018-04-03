@@ -60,12 +60,14 @@ Configuration hardenedServerConfig
 
     HardenedServerPolicy ServerPolicySettings {
         enableWinRM = $enableWinRM
+        PreLogonMessageTitle = $PreLogonMessageTitle 
+        PreLogonMessageBody = $PreLogonMessageBody        
     }
 
     HardenedServerRDP RDPSettings {}
 
     HardenedServerMisc MiscSettings {}
-    
+
 <#
     TODO
       IE lockdown

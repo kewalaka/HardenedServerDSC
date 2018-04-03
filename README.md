@@ -13,7 +13,7 @@ This uses the SecurityPolicyDSC resource.
 
 I have not tested it on anything older than Windows Server 2012R2 & 2016
 
-Requires Powershell 2 on target server to be secure.
+Requires Powershell 4 on the target server to be secured (primarily tested against PS5.1).
 
 ## Example usage
 
@@ -35,23 +35,27 @@ Configuration SimpleExample
 }
 
 SimpleExample
+# optionally kick off compliance automatically - this will run on localhost
+# so be careful not to run accidentally on your PC!
+#Start-DscConfiguration -Wait -Verbose -Path .\SimpleExample -Force
 ```
 
 ## Instructions
 
-To use, you need to install the AuditPolicyDSC, SecurityPolicyDSC modules.  This can be done from a machine with internet access
-& then transfered to the machine that you'd like to secure.  (Powershell modules are simply files & folders)
+TODO complete instructions for people less familiar with DSC.
 
-These installation steps require PowerShell 5 (to access the PS Gallery), the target host needs to be at least Powershell v2.
+To use, you need to install the AuditPolicyDSC, SecurityPolicyDSC, xNetworking modules.  This can be done from a machine with internet access & then transfered to the machine that you'd like to secure.  (Powershell modules are simply files & folders)
 
-To install the SecurityPolicyDSC module dependency:
+These installation steps require PowerShell 5 (to access the PS Gallery), the target host needs to be at least Powershell v4 (please, make it 5.1 if you can!).
+
+To install the module dependencies:
 ```
-Install-Module AuditPolicyDSC,SecurityPolicyDSC -Scope -CurrentUser -Force
+Install-Module AuditPolicyDSC,SecurityPolicyDSC,xNetworking -Scope -CurrentUser -Force
 ```
 
-TODO complete instructions
 
 ## Copyright
 
 Windows hardening DSC resource.
+
 Copyright 2018 Stu Mace 'kewalaka', released under an Apache License.
